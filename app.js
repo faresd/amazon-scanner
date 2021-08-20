@@ -1,11 +1,27 @@
 
 (function run () {
+    function sendEmail(message){
+        const emailData = {
+            service_id: 'service_wsjoi9f',
+            template_id: 'template_e1df1aa',
+            user_id: 'user_CcXlSXlVFtMj37BHUmCcH',
+            template_params: {message: message}
 
-    var script = document.createElement('script');
+        };
+        fetch('https://api.emailjs.com/api/v1.0/email/send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify(emailData)
+        })
+    }
+
+    let script = document.createElement('script');
     script.type = 'text/javascript';
     script.src = 'https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js';
     document.head.appendChild(script);
-    emailjs.init("user_CcXlSXlVFtMj37BHUmCcH");
     let fares = document.createElement("fares");
     let oldResult = []
     setInterval(async function () {
@@ -13,10 +29,11 @@
         let diff = newResult.filter(x => !oldResult.includes(x));
         if (diff.length > 0) {
             alert(diff)
+            sendEmail(`New items added ${diff.map(i => "  https://www.amazon.fr/dp/"+i+"  ")}`)
             oldResult = newResult
         } else console.error(new Date + " no change diff is " + diff + " and old " + oldResult.length + " new " + newResult.length)
 
-    }, 200000);
+    }, 10000);
 
 
     async function getHeightTech() {
@@ -49,39 +66,3 @@
 })()
 
 
-var data = {
-    service_id: 'service_wsjoi9f',
-    template_id: 'template_0egpq26',
-    user_id: 'user_CcXlSXlVFtMj37BHUmCcH',
-
-};
-
-fetch('https://api.emailjs.com/api/v1.0/email/send', {
-    type: 'POST',
-    data: JSON.stringify(data),
-    contentType: 'application/json'
-}).then(function() {
-    alert('Your mail is sent!');
-}).catch(function(error) {
-    alert('Oops... ' + JSON.stringify(error));
-});
-// code fragment
-
-
-
-fetch('https://api.emailjs.com/api/v1.0/email/send', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-    },
-    body: JSON.stringify(data)
-})
-
-
-var data = {
-    service_id: 'service_wsjoi9f',
-    template_id: 'template_e1df1aa',
-    user_id: 'user_CcXlSXlVFtMj37BHUmCcH',
-
-};

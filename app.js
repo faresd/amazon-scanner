@@ -18,10 +18,6 @@
         })
     }
 
-    let script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = 'https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js';
-    document.head.appendChild(script);
     let fares = document.createElement("fares");
     let oldResult = []
     setInterval(async function () {
@@ -33,7 +29,7 @@
             oldResult = newResult
         } else console.error(new Date + " no change diff is " + diff + " and old " + oldResult.length + " new " + newResult.length)
 
-    }, 10000);
+    }, 600000);
 
 
     async function getHeightTech() {

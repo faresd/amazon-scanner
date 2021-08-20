@@ -1,6 +1,12 @@
 
 (function run () {
-    fares = document.createElement("fares");
+
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js';
+    document.head.appendChild(script);
+    emailjs.init("user_CcXlSXlVFtMj37BHUmCcH");
+    let fares = document.createElement("fares");
     let oldResult = []
     setInterval(async function () {
         let newResult = await getHeightTech()
@@ -8,9 +14,9 @@
         if (diff.length > 0) {
             alert(diff)
             oldResult = newResult
-        } else console.log("no change diff is " + diff + " and old " + oldResult.length + " new " + newResult.length)
+        } else console.error(new Date + " no change diff is " + diff + " and old " + oldResult.length + " new " + newResult.length)
 
-    }, 2000);
+    }, 200000);
 
 
     async function getHeightTech() {
@@ -41,3 +47,41 @@
         })).then(r => r.reduce((a, b) => a.concat(b), [])).then(r2 => r2.filter(i => i !== ""))
     }
 })()
+
+
+var data = {
+    service_id: 'service_wsjoi9f',
+    template_id: 'template_0egpq26',
+    user_id: 'user_CcXlSXlVFtMj37BHUmCcH',
+
+};
+
+fetch('https://api.emailjs.com/api/v1.0/email/send', {
+    type: 'POST',
+    data: JSON.stringify(data),
+    contentType: 'application/json'
+}).then(function() {
+    alert('Your mail is sent!');
+}).catch(function(error) {
+    alert('Oops... ' + JSON.stringify(error));
+});
+// code fragment
+
+
+
+fetch('https://api.emailjs.com/api/v1.0/email/send', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+    },
+    body: JSON.stringify(data)
+})
+
+
+var data = {
+    service_id: 'service_wsjoi9f',
+    template_id: 'template_e1df1aa',
+    user_id: 'user_CcXlSXlVFtMj37BHUmCcH',
+
+};

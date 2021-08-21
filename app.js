@@ -3,7 +3,7 @@
     function sendEmail(message){
         const emailData = {
             service_id: 'service_wsjoi9f',
-            template_id: 'template_e1df1aa',
+            template_id: 'template_6pwvl8k',
             user_id: 'user_CcXlSXlVFtMj37BHUmCcH',
             template_params: {message: message}
 
@@ -35,7 +35,7 @@
             oldResult = newResult
         } else console.error(new Date + " no change diff is " + JSON.stringify(newDiff) + " and old " + Object.keys(oldResult).length + " new " + Object.keys(newResult).length)
 
-    }, 10000);
+    }, 600000);
 
 
     async function getHeightTech() {

@@ -24,7 +24,7 @@
         let newResult = await getHeightTech()
         let diff = newResult.filter(x => !oldResult.includes(x));
         if (diff.length > 0) {
-            sendEmail(`New items added : ${encodeURI('\\n')} ${diff.map(i => "https://www.amazon.fr/dp/"+i + "  " + "<br>" )}`)
+            sendEmail(`New items added : <br> ${diff.map(i => "https://www.amazon.fr/dp/"+i + "  " + "<br>" )}`)
             console.error(new Date + "New items found diff is " + diff + " and old " + oldResult.length + " new " + newResult.length)
             oldResult = newResult
         } else console.error(new Date + " no change diff is " + diff + " and old " + oldResult.length + " new " + newResult.length)
@@ -33,8 +33,8 @@
 
 
     async function getHeightTech() {
-        return await Promise.all([...Array(31)].map(async (e,i) => {
-            return await fetch(`https://www.amazon.fr/s?i=electronics&bbn=3581943031&s=price-asc-rank&dc&qid=1629479347&ref=sr_pg_${i}`, {
+        return await Promise.all([...Array(60)].map(async (e,i) => {
+            return await fetch(`https://www.amazon.fr/s?i=electronics&bbn=3581943031&s=price-asc-rank&dc&page=${i}&qid=1629569316&ref=sr_pg_${i}`, {
                 "headers": {
                     "accept": "application/xml",
                     "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",

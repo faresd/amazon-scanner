@@ -22,14 +22,20 @@
     let oldResult = []
     setInterval(async function () {
         let newResult = await getHeightTech()
-        let diff = newResult.filter(x => !oldResult.includes(x));
-        if (diff.length > 0) {
-            sendEmail(`New items added : <br> ${diff.map(i => "https://www.amazon.fr/dp/"+i + "  " + "<br>" )}`)
-            console.error(new Date + "New items found diff is " + diff + " and old " + oldResult.length + " new " + newResult.length)
+        let newDiff = Object.keys(newResult).reduce((diff, key) => {
+            if (oldResult[key] === newResult[key]) return diff
+            return {
+                ...diff,
+                [key]: newResult[key]
+            }
+        }, {})
+        if (Object.keys(newDiff).length > 0) {
+            sendEmail(`New items added : <br> ${Object.keys(newDiff).map(i => "https://www.amazon.fr/dp/"+i + "  " + "<br>" )}`)
+            console.error(new Date + "New items found diff is " + JSON.stringify(newDiff) + " and old " + Object.keys(oldResult).length + " new " + Object.keys(newResult).length)
             oldResult = newResult
-        } else console.error(new Date + " no change diff is " + diff + " and old " + oldResult.length + " new " + newResult.length)
+        } else console.error(new Date + " no change diff is " + JSON.stringify(newDiff) + " and old " + Object.keys(oldResult).length + " new " + Object.keys(newResult).length)
 
-    }, 600000);
+    }, 10000);
 
 
     async function getHeightTech() {
@@ -55,9 +61,20 @@
                 return response.text();
             }).then(function (string) {
                 fares.innerHTML = string
-                return Array.prototype.slice.call(fares.querySelectorAll('div[data-asin]')).map(i => i.dataset.asin)
+                return Array.prototype.slice.call(fares.querySelectorAll('div[data-asin]')).map(i => {
+                    let item = {}
+                    let price = Array.prototype.slice.call([...i.querySelectorAll("span")]
+                        .filter(a => a.textContent.includes("€"))).map(a => a.textContent).filter(a => a.length < 10)[0]
+                    let ASIN = i.dataset.asin
+
+                    item[ASIN] = price
+                    return item
+                })
             });
-        })).then(r => r.reduce((a, b) => a.concat(b), [])).then(r2 => r2.filter(i => i !== ""))
+        })).then(r => r.reduce((a, b) => a.concat(b), []))
+            .then(r2 => r2
+                .filter(i => Object.keys(i)[0] !== "")
+                .reduce((obj, item) => Object.assign(obj, { [Object.keys(item)[0]]: item[Object.keys(item)[0]] }), {}))
     }
 })()
 

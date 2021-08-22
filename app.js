@@ -19,24 +19,27 @@
     }
 
     function mailGunSendEmail(message){
-        let http = new XMLHttpRequest();
-        let url =
-            "https://api.mailgun.net/v3/sandbox9551086c0eb6483e973ce5e4374b038a.mailgun.org/messages";
-        let params =
-            "from=freesko@gmail.com"+
-            "to=freesko@gmail.com"+
-            "subject=Hello&"+
-            "text=Congratulations, you just sent an email with Mailgun!  You are truly awesome!";
-        http.open("POST", url, true);
-        http.setRequestHeader(
-            "Authorization",
-            "Basic " +
-            btoa("api:4813e506eb9a437c7ec989fbd9cd6ad3-9776af14-e0223e8d")
-        );
-        http.onload = function() {
-            console.log(this.responseText);
+        let myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer YXBpOmtleS0wMGQwMDcwZGZiNWJkZjA4Njk1MTE3MmZjMGIyNDE1ZQ==");
+
+        let formdata = new FormData();
+        formdata.append("from", "freesko@gmail.com");
+        formdata.append("to", "freesko@gmail.com");
+        formdata.append("subject", "HT Amazon New deals mailgun");
+        formdata.append("text", message);
+
+        let requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
         };
-        http.send(params);
+
+        fetch("https://api.mailgun.net/v3/sandboxe5089e2cbf2e43bd9df5d951f92e3d90.mailgun.org/messages", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+
     }
 
     let oldResult = []
@@ -61,6 +64,7 @@
             })
             if (Object.keys(goodDeals).length > 0) {
                 sendEmail(`Good deals found : <br> ${Object.keys(goodDeals).map(i => "https://www.amazon.fr/dp/"+i + "  " + "<br>" )}`)
+                mailGunSendEmail(`Good deals found : <br> ${Object.keys(goodDeals).map(i => "https://www.amazon.fr/dp/"+i + "  " + "<br>" )}`)
                 console.error(new Date + "Good deals found diff is " + JSON.stringify(goodDeals) + " and old " + Object.keys(oldResult).length + " new " + Object.keys(newResult).length)
                 oldResult = newResult
             } else {

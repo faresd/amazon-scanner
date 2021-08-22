@@ -36,7 +36,7 @@
                 let brandNewPrice = getBrandNewPrice(link)
                 let parsedUsedPrice = newDiff[i]
                 if (brandNewPrice && brandNewPrice > parsedUsedPrice * 3) {
-                    goodDeals[i] = parsedUsedPrice
+                    goodDeals[i] = parsedUsedPrice + " => " + brandNewPrice
                 }
             })
             if (Object.keys(goodDeals).length > 0) {

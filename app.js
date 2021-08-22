@@ -8,15 +8,35 @@
             template_params: {message: message}
 
         };
-        alert(emailData)
-        // fetch('https://api.emailjs.com/api/v1.0/email/send', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Accept': 'application/json',
-        //     },
-        //     body: JSON.stringify(emailData)
-        // })
+        fetch('https://api.emailjs.com/api/v1.0/email/send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify(emailData)
+        })
+    }
+
+    function mailGunSendEmail(message){
+        let http = new XMLHttpRequest();
+        let url =
+            "https://api.mailgun.net/v3/sandbox9551086c0eb6483e973ce5e4374b038a.mailgun.org/messages";
+        let params =
+            "from=freesko@gmail.com"+
+            "to=freesko@gmail.com"+
+            "subject=Hello&"+
+            "text=Congratulations, you just sent an email with Mailgun!  You are truly awesome!";
+        http.open("POST", url, true);
+        http.setRequestHeader(
+            "Authorization",
+            "Basic " +
+            btoa("api:4813e506eb9a437c7ec989fbd9cd6ad3-9776af14-e0223e8d")
+        );
+        http.onload = function() {
+            console.log(this.responseText);
+        };
+        http.send(params);
     }
 
     let oldResult = []
@@ -53,11 +73,11 @@
             console.error(new Date + " No change diff is " + JSON.stringify(newDiff) + " and old " + Object.keys(oldResult).length + " new " + Object.keys(newResult).length)
         }
 
-    }, 10000);
+    }, 300000);
 
 
     async function getHeightTech() {
-        return await Promise.all([...Array(6)].map(async (e,i) => {
+        return await Promise.all([...Array(60)].map(async (e,i) => {
             return await fetch(`https://www.amazon.fr/s?i=electronics&bbn=3581943031&s=price-asc-rank&dc&page=${i}&qid=1629569316&ref=sr_pg_${i}`, {
                 "headers": {
                     "accept": "application/xml",

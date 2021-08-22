@@ -22,7 +22,13 @@
     let oldResult = []
     setInterval(async function () {
         let newResult = await getHeightTech()
+        if (oldResult.length === 0) {
+            oldResult = newResult
+            return
+        }
+
         let diff = newResult.filter(x => !oldResult.includes(x));
+
         if (diff.length > 0) {
             sendEmail(`New items added : <br> ${diff.map(i => "https://www.amazon.fr/dp/"+i + "  " + "<br>" )}`)
             console.error(new Date + "New items found diff is " + diff + " and old " + oldResult.length + " new " + newResult.length)

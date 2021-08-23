@@ -93,10 +93,10 @@ if(typeof process !== 'undefined' && process && process.env) {
                 }
                 newDiff[i] = newDiff[i] + " => " + brandNewPrice
             }))
-            sendEmail("HT Amazon New items added mailgun", `New items added : <br> \n ${Object.keys(newDiff).map(i => "https://www.amazon.fr/dp/"+i + "  " + " With pricing : " + newDiff[i] + "\n <br>" )}`)
+            sendEmail("HT Amazon New items added mailgun", `New items added :  \n ${Object.keys(newDiff).map(i => "https://www.amazon.fr/dp/"+i + "  " + " With pricing : " + newDiff[i] + " \n" )}`)
 
             if (Object.keys(goodDeals).length > 0) {
-                sendEmail("HT Amazon New deals mailgun",`Maybe good deals found : \n <br> ${Object.keys(goodDeals).map(i => "https://www.amazon.fr/dp/" + i + "  " + " With pricing : " + goodDeals[i] + "\\n <br> ")}`)
+                sendEmail("HT Amazon New deals mailgun",`Maybe good deals found : \n ${Object.keys(goodDeals).map(i => "https://www.amazon.fr/dp/" + i + "  " + " With pricing : " + goodDeals[i] + " \n")}`)
                 console.error(new Date + " Good deals found diff is " + JSON.stringify(goodDeals) + " and old " + Object.keys(oldResult).length + " new " + Object.keys(newResult).length)
                 oldResult = newResult
             } else {

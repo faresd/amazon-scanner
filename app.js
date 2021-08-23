@@ -74,7 +74,7 @@ if(typeof process !== 'undefined' && process && process.env) {
                 let parsedUsedPrice = newDiff[i]
 
 
-                console.error(new Date + "New items found diff is " + newDiff + " and old " + oldResult.length + " new " + newResult.length)
+                console.error(new Date + "New items found, diff is " + newDiff + " and old " + oldResult.length + " new " + newResult.length)
                 console.error("brandNewPrice is " + brandNewPrice + " and " + "parsedUsedPrice" + parsedUsedPrice + " and 3x price used is " + parsedUsedPrice * 3 + "and link is : " + link)
                 if (brandNewPrice && brandNewPrice > parsedUsedPrice * 3) {
                     goodDeals[i] = parsedUsedPrice + " => " + brandNewPrice
@@ -97,7 +97,7 @@ if(typeof process !== 'undefined' && process && process.env) {
             console.error(new Date + " No change diff is " + JSON.stringify(newDiff) + " and old " + Object.keys(oldResult).length + " new " + Object.keys(newResult).length)
         }
 
-    }, 100000);
+    }, 600000);
 
 
     async function getHeightTech() {

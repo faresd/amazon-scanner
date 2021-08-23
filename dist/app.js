@@ -17,7 +17,7 @@ const mailjsTemplateId = "template_e1df1aa"
 const mailjsServiceId = "service_wsjoi9f"
 if(typeof process !== 'undefined' && process && process.env) {
     const mock =
-        (/* unused pure expression or super */ null && ("mock"))
+        process.env.MOCK
 }
 
 (function run () {
@@ -85,14 +85,16 @@ if(typeof process !== 'undefined' && process && process.env) {
                 let brandNewPrice = await getBrandNewPrice(link)
                 let parsedUsedPrice = newDiff[i]
 
-                sendEmail("HT Amazon New items added mailgun", `New items added : <br> \n ${Object.keys(newDiff).map(i => "https://www.amazon.fr/dp/"+i + "  " + " With pricing : " + newDiff[i] + "\n <br>" )}`)
 
                 console.error(new Date + "New items found diff is " + newDiff + " and old " + oldResult.length + " new " + newResult.length)
                 console.error("brandNewPrice is " + brandNewPrice + " and " + "parsedUsedPrice" + parsedUsedPrice + " and 3x price used is " + parsedUsedPrice * 3 + "and link is : " + link)
                 if (brandNewPrice && brandNewPrice > parsedUsedPrice * 3) {
                     goodDeals[i] = parsedUsedPrice + " => " + brandNewPrice
                 }
+                newDiff[i] = newDiff[i] + " => " + brandNewPrice
             }))
+            sendEmail("HT Amazon New items added mailgun", `New items added : <br> \n ${Object.keys(newDiff).map(i => "https://www.amazon.fr/dp/"+i + "  " + " With pricing : " + newDiff[i] + "\n <br>" )}`)
+
             if (Object.keys(goodDeals).length > 0) {
                 sendEmail("HT Amazon New deals mailgun",`Maybe good deals found : \n <br> ${Object.keys(goodDeals).map(i => "https://www.amazon.fr/dp/" + i + "  " + " With pricing : " + goodDeals[i] + "\\n <br> ")}`)
                 console.error(new Date + " Good deals found diff is " + JSON.stringify(goodDeals) + " and old " + Object.keys(oldResult).length + " new " + Object.keys(newResult).length)

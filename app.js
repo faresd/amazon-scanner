@@ -92,12 +92,12 @@ if(typeof process !== 'undefined' && process && process.env) {
                 console.error(new Date + " No good deals diff is " + JSON.stringify(newDiff) + " and old " + Object.keys(oldResult).length + " new " + Object.keys(newResult).length)
             }
 
-    } else {
+        } else {
             oldResult = newResult
             console.error(new Date + " No change diff is " + JSON.stringify(newDiff) + " and old " + Object.keys(oldResult).length + " new " + Object.keys(newResult).length)
         }
 
-    }, 600000);
+    }, 60000*30);
 
 
     async function getHeightTech() {

@@ -1,15 +1,26 @@
 {
-  "name": "untitled2",
+  "name": "Amazon scanner",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "dotenv-webpack": "^7.0.3",
+    "fs": "0.0.1-security",
+    "os": "^0.1.2",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "babel-core": "~6.26.3",
+    "babel-loader": "~8.2.2",
+    "babel-preset-env": "~1.7.0",
+    "webpack": "~5.51.1",
+    "webpack-cli": "~4.8.0"
   }
 }

@@ -1,4 +1,3 @@
-const dotenv = require('dotenv')
 const mailgunKey = process.env.MAILGUN_KEY
 const mailgunURL = process.env.MAILGUN_URL
 const mailjsUserId = process.env.MAILJS_USER_ID

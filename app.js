@@ -1,10 +1,17 @@
+const dotenv = require('dotenv')
+const mailgunKey = process.env.MAILGUN_KEY
+const mailgunURL = process.env.MAILGUN_URL
+const mailjsUserId = process.env.MAILJS_USER_ID
+const mailjsTemplateId = process.env.MAILJS_TEMPLATE_ID
+const mailjsServiceId = process.env.MAILJS_SERVICE_ID
+
 
 (function run () {
-    function sendEmail(message){
+    function sendEmailMailJs(message){
         const emailData = {
-            service_id: 'service_wsjoi9f',
-            template_id: 'template_6pwvl8k',
-            user_id: 'user_CcXlSXlVFtMj37BHUmCcH',
+            service_id: mailjsServiceId,
+            template_id: mailjsTemplateId,
+            user_id: mailjsUserId,
             template_params: {message: message}
 
         };
@@ -18,9 +25,9 @@
         })
     }
 
-    function mailGunSendEmail(message){
+    function sendEmail(message){
         let myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer YXBpOmtleS0wMGQwMDcwZGZiNWJkZjA4Njk1MTE3MmZjMGIyNDE1ZQ==");
+        myHeaders.append("Authorization", mailgunKey);
 
         let formdata = new FormData();
         formdata.append("from", "freesko@gmail.com");
@@ -35,7 +42,7 @@
             redirect: 'follow'
         };
 
-        fetch("https://api.mailgun.net/v3/sandboxe5089e2cbf2e43bd9df5d951f92e3d90.mailgun.org/messages", requestOptions)
+        fetch(`${mailgunURL}/messages`, requestOptions)
             .then(response => response.text())
             .then(result => console.log(result))
             .catch(error => console.log('error', error));

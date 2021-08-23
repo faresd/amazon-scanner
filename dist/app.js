@@ -39,14 +39,14 @@ if(typeof process !== 'undefined' && process && process.env) {
         })
     }
 
-    function sendEmail(message){
+    function sendEmail(subject, message){
         let myHeaders = new Headers();
         myHeaders.append("Authorization", mailgunKey);
 
         let formdata = new FormData();
         formdata.append("from", "freesko@gmail.com");
         formdata.append("to", "freesko@gmail.com");
-        formdata.append("subject", "HT Amazon New deals mailgun");
+        formdata.append("subject", subject);
         formdata.append("text", message);
 
         let requestOptions = {
@@ -66,6 +66,11 @@ if(typeof process !== 'undefined' && process && process.env) {
     let oldResult = []
     setInterval(async function () {
         let newResult = await getHeightTech()
+        if(oldResult.length === 0 ) {
+            oldResult = newResult
+            return
+        }
+
         let newDiff = Object.keys(newResult).reduce((diff, key) => {
             if (oldResult[key] === newResult[key]) return diff
             return {
@@ -75,18 +80,22 @@ if(typeof process !== 'undefined' && process && process.env) {
         }, {})
         if (Object.keys(newDiff).length > 0) {
             let goodDeals = {}
-            Object.keys(newDiff).map(i => {
+            await Promise.all(Object.keys(newDiff).map(async i => {
                 let link = "https://www.amazon.fr/dp/"+i
-                let brandNewPrice = getBrandNewPrice(link)
+                let brandNewPrice = await getBrandNewPrice(link)
                 let parsedUsedPrice = newDiff[i]
+
+                sendEmail("HT Amazon New items added mailgun", `New items added : <br> \n ${Object.keys(newDiff).map(i => "https://www.amazon.fr/dp/"+i + "  " + " With pricing : " + newDiff[i] + "\n <br>" )}`)
+
+                console.error(new Date + "New items found diff is " + newDiff + " and old " + oldResult.length + " new " + newResult.length)
+                console.error("brandNewPrice is " + brandNewPrice + " and " + "parsedUsedPrice" + parsedUsedPrice + " and 3x price used is " + parsedUsedPrice * 3 + "and link is : " + link)
                 if (brandNewPrice && brandNewPrice > parsedUsedPrice * 3) {
                     goodDeals[i] = parsedUsedPrice + " => " + brandNewPrice
                 }
-            })
+            }))
             if (Object.keys(goodDeals).length > 0) {
-                sendEmail(`Good deals found : \n <br> ${Object.keys(goodDeals).map(i => "https://www.amazon.fr/dp/"+i + "  " + "\n <br>" )}`)
-                mailGunSendEmail(`Good deals found : <br> ${Object.keys(goodDeals).map(i => "https://www.amazon.fr/dp/"+i + "  " + "<br>" )}`)
-                console.error(new Date + "Good deals found diff is " + JSON.stringify(goodDeals) + " and old " + Object.keys(oldResult).length + " new " + Object.keys(newResult).length)
+                sendEmail("HT Amazon New deals mailgun",`Maybe good deals found : \n <br> ${Object.keys(goodDeals).map(i => "https://www.amazon.fr/dp/" + i + "  " + " With pricing : " + goodDeals[i] + "\\n <br> ")}`)
+                console.error(new Date + " Good deals found diff is " + JSON.stringify(goodDeals) + " and old " + Object.keys(oldResult).length + " new " + Object.keys(newResult).length)
                 oldResult = newResult
             } else {
                 oldResult = newResult
@@ -98,7 +107,7 @@ if(typeof process !== 'undefined' && process && process.env) {
             console.error(new Date + " No change diff is " + JSON.stringify(newDiff) + " and old " + Object.keys(oldResult).length + " new " + Object.keys(newResult).length)
         }
 
-    }, 200000);
+    }, 100000);
 
 
     async function getHeightTech() {
@@ -170,7 +179,9 @@ if(typeof process !== 'undefined' && process && process.env) {
         }).then(function (string) {
             let productPage = document.createElement("productPage" + parseInt(Math.random()*100000));
             productPage.innerHTML = string
-            let priceElm = productPage.querySelector("#priceblock_ourprice")
+            let bPriceElm = productPage.querySelector("#priceblock_businessprice")
+            let normalPriceElm = productPage.querySelector("#priceblock_ourprice")
+            let priceElm = normalPriceElm? normalPriceElm : bPriceElm
 
             if(priceElm && priceElm.textContent) {
                 let parsedPrice = parseFloat(priceElm.textContent.substring(0,5).replace(",", "."))

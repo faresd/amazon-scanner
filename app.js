@@ -6,7 +6,7 @@ const mailjsTemplateId = process.env.MAILJS_TEMPLATE_ID
 const mailjsServiceId = process.env.MAILJS_SERVICE_ID
 
 (function run () {
-    function sendEmail(message){
+    function sendEmailMailJs(message){
         const emailData = {
             service_id: mailjsServiceId,
             template_id: mailjsTemplateId,

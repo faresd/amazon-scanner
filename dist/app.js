@@ -84,7 +84,7 @@ if(typeof process !== 'undefined' && process && process.env) {
                 }
             })
             if (Object.keys(goodDeals).length > 0) {
-                sendEmail(`Good deals found : <br> ${Object.keys(goodDeals).map(i => "https://www.amazon.fr/dp/"+i + "  " + "<br>" )}`)
+                sendEmail(`Good deals found : \n <br> ${Object.keys(goodDeals).map(i => "https://www.amazon.fr/dp/"+i + "  " + "\n <br>" )}`)
                 mailGunSendEmail(`Good deals found : <br> ${Object.keys(goodDeals).map(i => "https://www.amazon.fr/dp/"+i + "  " + "<br>" )}`)
                 console.error(new Date + "Good deals found diff is " + JSON.stringify(goodDeals) + " and old " + Object.keys(oldResult).length + " new " + Object.keys(newResult).length)
                 oldResult = newResult
@@ -98,7 +98,7 @@ if(typeof process !== 'undefined' && process && process.env) {
             console.error(new Date + " No change diff is " + JSON.stringify(newDiff) + " and old " + Object.keys(oldResult).length + " new " + Object.keys(newResult).length)
         }
 
-    }, 300000);
+    }, 200000);
 
 
     async function getHeightTech() {
@@ -126,16 +126,20 @@ if(typeof process !== 'undefined' && process && process.env) {
                 let newElm = document.createElement("newElm" + parseInt(Math.random()*100000));
 
                 newElm.innerHTML = string
-                return Array.prototype.slice.call(newElm.querySelectorAll('div[data-asin]')).filter(i => i.dataset.asin.length > 0 && i.dataset.asin.length < 12).map(i => {
+                let items = []
+                Array.prototype.slice.call(newElm.querySelectorAll('div[data-asin]')).filter(i => i.dataset.asin.length > 0 && i.dataset.asin.length < 12).map(i => {
+
                     let item = {}
+                    let ASIN = i.dataset.asin
                     let price = Array.prototype.slice.call([...i.querySelectorAll("span")]
                         .filter(a => a.textContent.includes("€"))).map(a => a.textContent).filter(a => a.length < 10)[0]
-                    let parsedPrice = parseFloat(price.substring(0,5).replace(',','.'))
-                    let ASIN = i.dataset.asin
-
-                    item[ASIN] = parsedPrice
-                    return item
+                    if(ASIN && price) {
+                        let parsedPrice = parseFloat(price.substring(0,5).replace(',','.'))
+                        item[ASIN] = parsedPrice
+                        items.push(item)
+                    }
                 })
+                return items
             });
         })).then(r => r.reduce((a, b) => a.concat(b), []))
             .then(r2 => r2

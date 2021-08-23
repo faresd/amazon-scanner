@@ -114,16 +114,20 @@ if(typeof process !== 'undefined' && process && process.env) {
                 let newElm = document.createElement("newElm" + parseInt(Math.random()*100000));
 
                 newElm.innerHTML = string
-                return Array.prototype.slice.call(newElm.querySelectorAll('div[data-asin]')).filter(i => i.dataset.asin.length > 0 && i.dataset.asin.length < 12).map(i => {
+                let items = []
+                Array.prototype.slice.call(newElm.querySelectorAll('div[data-asin]')).filter(i => i.dataset.asin.length > 0 && i.dataset.asin.length < 12).map(i => {
+
                     let item = {}
+                    let ASIN = i.dataset.asin
                     let price = Array.prototype.slice.call([...i.querySelectorAll("span")]
                         .filter(a => a.textContent.includes("€"))).map(a => a.textContent).filter(a => a.length < 10)[0]
-                    let parsedPrice = parseFloat(price.substring(0,5).replace(',','.'))
-                    let ASIN = i.dataset.asin
-
-                    item[ASIN] = parsedPrice
-                    return item
+                    if(ASIN && price) {
+                        let parsedPrice = parseFloat(price.substring(0,5).replace(',','.'))
+                        item[ASIN] = parsedPrice
+                        items.push(item)
+                    }
                 })
+                return items
             });
         })).then(r => r.reduce((a, b) => a.concat(b), []))
             .then(r2 => r2

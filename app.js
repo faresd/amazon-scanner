@@ -1,10 +1,16 @@
+const dotenv = require('dotenv')
+const mailgunKey = process.env.MAILGUN_KEY
+const mailgunURL = process.env.MAILGUN_URL
+const mailjsUserId = process.env.MAILJS_USER_ID
+const mailjsTemplateId = process.env.MAILJS_TEMPLATE_ID
+const mailjsServiceId = process.env.MAILJS_SERVICE_ID
 
 (function run () {
     function sendEmail(message){
         const emailData = {
-            service_id: 'service_wsjoi9f',
-            template_id: 'template_e1df1aa',
-            user_id: 'user_CcXlSXlVFtMj37BHUmCcH',
+            service_id: mailjsServiceId,
+            template_id: mailjsTemplateId,
+            user_id: mailjsUserId,
             template_params: {message: message}
 
         };
@@ -16,6 +22,30 @@
             },
             body: JSON.stringify(emailData)
         })
+    }
+
+    function sendEmail(message){
+        let myHeaders = new Headers();
+        myHeaders.append("Authorization", mailgunKey);
+
+        let formdata = new FormData();
+        formdata.append("from", "freesko@gmail.com");
+        formdata.append("to", "freesko@gmail.com");
+        formdata.append("subject", "HT Amazon New deals mailgun");
+        formdata.append("text", message);
+
+        let requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+        };
+
+        fetch(`${mailgunURL}/messages`, requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+
     }
 
     let fares = document.createElement("fares");

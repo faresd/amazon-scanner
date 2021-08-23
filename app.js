@@ -30,7 +30,7 @@
         let diff = newResult.filter(x => !oldResult.includes(x));
 
         if (diff.length > 0) {
-            sendEmail(`New items added : <br> ${diff.map(i => "https://www.amazon.fr/dp/"+i + "  " + "<br>" )}`)
+            sendEmail(`New items added : <br> \n ${diff.map(i => "https://www.amazon.fr/dp/"+i + "  " + " \n <br>" )}`)
             console.error(new Date + "New items found diff is " + diff + " and old " + oldResult.length + " new " + newResult.length)
             oldResult = newResult
         } else console.error(new Date + " no change diff is " + diff + " and old " + oldResult.length + " new " + newResult.length)

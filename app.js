@@ -3,7 +3,10 @@ const mailgunURL = process.env.MAILGUN_URL
 const mailjsUserId = process.env.MAILJS_USER_ID
 const mailjsTemplateId = process.env.MAILJS_TEMPLATE_ID
 const mailjsServiceId = process.env.MAILJS_SERVICE_ID
-
+if(typeof process !== 'undefined' && process && process.env) {
+    const mock =
+        process.env.MOCK
+}
 
 (function run () {
     function sendEmailMailJs(message){

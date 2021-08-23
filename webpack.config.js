@@ -15,6 +15,6 @@ module.exports = {
         filename: 'app.js',
     },
     plugins: [
-        new Dotenv()
+        new Dotenv({ignoreStub: true})
     ],
 };

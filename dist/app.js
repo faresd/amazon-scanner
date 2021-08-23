@@ -15,7 +15,10 @@ const mailgunURL = "https://api.mailgun.net/v3/sandboxe5089e2cbf2e43bd9df5d951f9
 const mailjsUserId = "user_CcXlSXlVFtMj37BHUmCcH"
 const mailjsTemplateId = "template_e1df1aa"
 const mailjsServiceId = "service_wsjoi9f"
-
+if(typeof process !== 'undefined' && process && process.env) {
+    const mock =
+        (/* unused pure expression or super */ null && ("mock"))
+}
 
 (function run () {
     function sendEmailMailJs(message){
@@ -81,7 +84,8 @@ const mailjsServiceId = "service_wsjoi9f"
                 }
             })
             if (Object.keys(goodDeals).length > 0) {
-                sendEmail(`Good deals found : \n <br> ${Object.keys(goodDeals).map(i => "https://www.amazon.fr/dp/"+i + "  " + " \n <br>" )}`)
+                sendEmail(`Good deals found : <br> ${Object.keys(goodDeals).map(i => "https://www.amazon.fr/dp/"+i + "  " + "<br>" )}`)
+                mailGunSendEmail(`Good deals found : <br> ${Object.keys(goodDeals).map(i => "https://www.amazon.fr/dp/"+i + "  " + "<br>" )}`)
                 console.error(new Date + "Good deals found diff is " + JSON.stringify(goodDeals) + " and old " + Object.keys(oldResult).length + " new " + Object.keys(newResult).length)
                 oldResult = newResult
             } else {

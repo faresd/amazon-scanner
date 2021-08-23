@@ -72,9 +72,8 @@ if(typeof process !== 'undefined' && process && process.env) {
                 }
             })
             if (Object.keys(goodDeals).length > 0) {
-                sendEmail(`Good deals found : <br> ${Object.keys(goodDeals).map(i => "https://www.amazon.fr/dp/"+i + "  " + "<br>" )}`)
-                mailGunSendEmail(`Good deals found : <br> ${Object.keys(goodDeals).map(i => "https://www.amazon.fr/dp/"+i + "  " + "<br>" )}`)
-                console.error(new Date + "Good deals found diff is " + JSON.stringify(goodDeals) + " and old " + Object.keys(oldResult).length + " new " + Object.keys(newResult).length)
+                sendEmail(`Good deals found : \n <br> ${Object.keys(goodDeals).map(i => "https://www.amazon.fr/dp/"+i + "  " + "\n <br>" )}`)
+                console.error(new Date + " Good deals found diff is " + JSON.stringify(goodDeals) + " and old " + Object.keys(oldResult).length + " new " + Object.keys(newResult).length)
                 oldResult = newResult
             } else {
                 oldResult = newResult

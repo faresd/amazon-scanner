@@ -65,6 +65,25 @@ if(typeof process !== 'undefined' && process && process.env) {
 
     let oldResult = []
     setInterval(async function () {
+        var startTime = '1:00:00';
+        var endTime = '7:00:00';
+
+        currentDate = new Date()
+
+        let startDate = new Date(currentDate.getTime());
+        startDate.setHours(startTime.split(":")[0]);
+        startDate.setMinutes(startTime.split(":")[1]);
+        startDate.setSeconds(startTime.split(":")[2]);
+
+        let endDate = new Date(currentDate.getTime());
+        endDate.setHours(endTime.split(":")[0]);
+        endDate.setMinutes(endTime.split(":")[1]);
+        endDate.setSeconds(endTime.split(":")[2]);
+
+        let night = startDate < currentDate && endDate > currentDate
+
+        if(night) return
+
         let newResult = await getHeightTech()
         if(oldResult.length === 0 ) {
             oldResult = newResult
@@ -86,7 +105,7 @@ if(typeof process !== 'undefined' && process && process.env) {
                 let parsedUsedPrice = newDiff[i]
 
 
-                console.error(new Date + "New items found diff is " + newDiff + " and old " + oldResult.length + " new " + newResult.length)
+                console.error(new Date + "New items found, diff is " + newDiff + " and old " + oldResult.length + " new " + newResult.length)
                 console.error("brandNewPrice is " + brandNewPrice + " and " + "parsedUsedPrice" + parsedUsedPrice + " and 3x price used is " + parsedUsedPrice * 3 + "and link is : " + link)
                 if (brandNewPrice && brandNewPrice > parsedUsedPrice * 3) {
                     goodDeals[i] = parsedUsedPrice + " => " + brandNewPrice
@@ -104,12 +123,12 @@ if(typeof process !== 'undefined' && process && process.env) {
                 console.error(new Date + " No good deals diff is " + JSON.stringify(newDiff) + " and old " + Object.keys(oldResult).length + " new " + Object.keys(newResult).length)
             }
 
-    } else {
+        } else {
             oldResult = newResult
             console.error(new Date + " No change diff is " + JSON.stringify(newDiff) + " and old " + Object.keys(oldResult).length + " new " + Object.keys(newResult).length)
         }
 
-    }, 100000);
+    }, 60000*30);
 
 
     async function getHeightTech() {

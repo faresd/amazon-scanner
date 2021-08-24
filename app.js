@@ -190,14 +190,14 @@ if(typeof process !== 'undefined' && process && process.env) {
         let currentDate = new Date()
 
         let startDate = new Date(currentDate.getTime());
-        startDate.setHours(startTime.split(":")[0]);
-        startDate.setMinutes(startTime.split(":")[1]);
-        startDate.setSeconds(startTime.split(":")[2]);
+        startDate.setHours(parseInt(startTime.split(":")[0]))
+        startDate.setMinutes(parseInt(startTime.split(":")[1]))
+        startDate.setSeconds(parseInt(startTime.split(":")[2]))
 
         let endDate = new Date(currentDate.getTime());
-        endDate.setHours(endTime.split(":")[0]);
-        endDate.setMinutes(endTime.split(":")[1]);
-        endDate.setSeconds(endTime.split(":")[2]);
+        endDate.setHours(parseInt(endTime.split(":")[0]))
+        endDate.setMinutes(parseInt(endTime.split(":")[1]))
+        endDate.setSeconds(parseInt(endTime.split(":")[2]))
 
         return startDate < currentDate && endDate > currentDate
     }

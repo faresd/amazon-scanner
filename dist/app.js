@@ -63,12 +63,15 @@ if(typeof process !== 'undefined' && process && process.env) {
 
     }
 
-    let oldResult = []
+
+
     setInterval(async function () {
+        let oldResult = getOldResult()
+        if (isNight()) return
 
         let newResult = await getHeightTech()
         if(oldResult.length === 0 ) {
-            oldResult = newResult
+            updateOldResult(newResult)
             return
         }
 
@@ -99,14 +102,14 @@ if(typeof process !== 'undefined' && process && process.env) {
             if (Object.keys(goodDeals).length > 0) {
                 sendEmail("HT Amazon New deals mailgun",`Maybe good deals found : \n ${Object.keys(goodDeals).map(i => "https://www.amazon.fr/dp/" + i + "  " + " With pricing : " + goodDeals[i] + " \n")}`)
                 console.error(new Date + " Good deals found diff is " + JSON.stringify(goodDeals) + " and old " + Object.keys(oldResult).length + " new " + Object.keys(newResult).length)
-                oldResult = newResult
+                updateOldResult(newResult)
             } else {
-                oldResult = newResult
+                updateOldResult(newResult)
                 console.error(new Date + " No good deals diff is " + JSON.stringify(newDiff) + " and old " + Object.keys(oldResult).length + " new " + Object.keys(newResult).length)
             }
 
         } else {
-            oldResult = newResult
+            updateOldResult(newResult)
             console.error(new Date + " No change diff is " + JSON.stringify(newDiff) + " and old " + Object.keys(oldResult).length + " new " + Object.keys(newResult).length)
         }
 
@@ -191,6 +194,34 @@ if(typeof process !== 'undefined' && process && process.env) {
                 return parsedPrice
             } else return null
         });
+    }
+
+    function updateOldResult(value) {
+        return localStorage.setItem('oldResult', JSON.stringify(value))
+    }
+
+    function getOldResult() {
+        return JSON.parse(localStorage.getItem('oldResult') || "[]")
+    }
+
+    function isNight() {
+        let startTime = '1:00:00';
+        let endTime = '7:00:00';
+
+        let currentDate = new Date()
+
+        let startDate;
+        startDate = new Date(currentDate.getTime());
+        startDate.setHours(parseInt(startTime.split(":")[0]))
+        startDate.setMinutes(parseInt(startTime.split(":")[1]))
+        startDate.setSeconds(parseInt(startTime.split(":")[2]))
+
+        let endDate = new Date(currentDate.getTime());
+        endDate.setHours(parseInt(endTime.split(":")[0]))
+        endDate.setMinutes(parseInt(endTime.split(":")[1]))
+        endDate.setSeconds(parseInt(endTime.split(":")[2]))
+
+        return startDate < currentDate && endDate > currentDate
     }
 })()
 

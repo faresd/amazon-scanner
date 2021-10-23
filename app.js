@@ -173,9 +173,10 @@ if(typeof process !== 'undefined' && process && process.env) {
         }).then(function (string) {
             let productPage = document.createElement("productPage" + parseInt(Math.random()*100000));
             productPage.innerHTML = string
+            let nbbPriceElm = productPage.querySelector("#newBuyBoxPrice")
             let bPriceElm = productPage.querySelector("#priceblock_businessprice")
             let normalPriceElm = productPage.querySelector("#priceblock_ourprice")
-            let priceElm = normalPriceElm? normalPriceElm : bPriceElm
+            let priceElm = nbbPriceElm? nbbPriceElm :(normalPriceElm? normalPriceElm : bPriceElm)
 
             if(priceElm && priceElm.textContent) {
                 let parsedPrice = parseFloat(priceElm.textContent.substring(0,5).replace(",", "."))
